@@ -158,7 +158,7 @@ class NewWords():
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
-        print("需要输入文件路径")
+        print("需要输入文件路径、提取词数")
         exit(1)
 
     word_freq_map = {}

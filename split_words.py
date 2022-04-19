@@ -1,5 +1,4 @@
-import jieba
-import sys
+#!/root/anaconda3/bin/python
 import re
 import numpy as np
 from collections import ChainMap
@@ -167,14 +166,14 @@ if __name__ == '__main__':
     file_path = sys.argv[1]
     old_words_num = int(sys.argv[2])
 
-    sentence = []
+    sentences = []
     with open(file_path, 'r', encoding='utf-8') as f:
         for l in f:
             l = l.strip()
             if l.startswith('#'):
                 continue
             if l:
-                sentence.append(l + '\n')
+                sentences.append(l + '\n')
 
     # words = jieba.lcut(sentence)
     # for word in words:
@@ -183,16 +182,18 @@ if __name__ == '__main__':
     #             word_freq_map[word] = word_freq_map[word] + 1
     #         else:
     #             word_freq_map[word] = 1
-    sentence = ''.join(sentence)
-    lines = HanLP.extractPhrase(sentence, old_words_num)
-    for word in lines:
-        if (len(word) > 1 and lines != '\r\n' and lines != '\n'):
-            if word in word_freq_map:
-                word_freq_map[word] = word_freq_map[word] + 1
-            else:
-                word_freq_map[word] = 1
 
-    discover.parse(sentence)
+    for sentence in sentences:
+        lines = HanLP.extractPhrase(sentence, old_words_num)
+        for word in lines:
+            if (len(word) > 1 and lines != '\r\n' and lines != '\n'):
+                if word in word_freq_map:
+                    word_freq_map[word] = word_freq_map[word] + 1
+                else:
+                    word_freq_map[word] = 1
+
+    sentences = ''.join(sentences)
+    discover.parse(sentences)
     sorted_by = 'pmi'
     for k, v in discover.candidates(sorted_by):
         if k.strip() not in word_freq_map:
